@@ -1,7 +1,7 @@
 PRODUCT_TYPES = [
-    {"id": 1,
-    "description": "burrito"
-
+    {
+        "id": 1,
+        "description": "burrito"
     },
     {
         "id": 2,
@@ -17,10 +17,11 @@ PRODUCT_TYPES = [
     }
 ]
 
+
 def get_all_product_types():
-    """Get entire list of products
+    """Get entire list of product types
 
     Returns:
-        list: The list of product dictionaries
+        list: The list of product type dictionaries
     """
     return PRODUCT_TYPES
