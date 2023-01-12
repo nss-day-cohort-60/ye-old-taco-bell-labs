@@ -1,6 +1,6 @@
 import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
-from views import get_all_products, get_single_product
+from views import get_all_products, get_single_product, get_all_product_types
 
 
 class HandleRequests(BaseHTTPRequestHandler):
@@ -25,15 +25,23 @@ class HandleRequests(BaseHTTPRequestHandler):
     def do_GET(self):
         """Handles GET requests to the server
         """
-        self._set_headers(200)
+        
         (resource, id) = self.parse_url(self.path)
 
         if resource == "products":
             if id is not None:
+                self._set_headers(200)
                 response = get_single_product(id)
             else:
+                self._set_headers(200)
                 response = get_all_products()
-
+        elif resource == "product_types":
+            if id is not None:
+                self._set_headers(405)
+                response = ""
+            else:
+                self._set_headers(200)
+                response = get_all_product_types()
         else:
             response = []
 
