@@ -1,46 +1,47 @@
 import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
-from views import get_all_products
+from views import get_all_products, get_single_product
 
 
-# Here's a class. It inherits from another class.
-# For now, think of a class as a container for functions that
-# work together for a common purpose. In this case, that
-# common purpose is to respond to HTTP requests from a client.
 class HandleRequests(BaseHTTPRequestHandler):
-    # This is a Docstring it should be at the beginning of all classes and functions
-    # It gives a description of the class or function
     """Controls the functionality of any GET, PUT, POST, DELETE requests to the server
     """
 
-    # Here's a class function
+    def parse_url(self, path):
+        path_params = path.split("/")
+        resource = path_params[1]
+        id = None
 
-    # Here's a method on the class that overrides the parent's method.
-    # It handles any GET request.
+        try:
+            id = int(path_params[2])
+        except IndexError:
+            pass
+        except ValueError:
+            pass
+
+        return (resource, id)  # This is a tuple
+
+
     def do_GET(self):
         """Handles GET requests to the server
         """
-        # Set the response code to 'Ok'
         self._set_headers(200)
+        (resource, id) = self.parse_url(self.path)
 
-        # It's an if..else statement
-        if self.path == "/products":
-            # In Python, this is a list of dictionaries
-            # In JavaScript, you would call it an array of objects
-            response = get_all_products()
+        if resource == "products":
+            if id is not None:
+                response = get_single_product(id)
+            else:
+                response = get_all_products()
 
         else:
             response = []
 
-        # Send a JSON formatted string as a response
         self.wfile.write(json.dumps(response).encode())
 
-    # Here's a method on the class that overrides the parent's method.
-    # It handles any POST request.
     def do_POST(self):
         """Handles POST requests to the server"""
 
-        # Set response code to 'Created'
         self._set_headers(201)
 
         content_len = int(self.headers.get('content-length', 0))
@@ -48,13 +49,11 @@ class HandleRequests(BaseHTTPRequestHandler):
         response = { "payload": post_body }
         self.wfile.write(json.dumps(response).encode())
 
-    # A method that handles any PUT request.
     def do_PUT(self):
         """Handles PUT requests to the server"""
         self.do_PUT()
 
     def _set_headers(self, status):
-        # Notice this Docstring also includes information about the arguments passed to the function
         """Sets the status code, Content-Type and Access-Control-Allow-Origin
         headers on the response
 
@@ -66,7 +65,6 @@ class HandleRequests(BaseHTTPRequestHandler):
         self.send_header('Access-Control-Allow-Origin', '*')
         self.end_headers()
 
-    # Another method! This supports requests with the OPTIONS verb.
     def do_OPTIONS(self):
         """Sets the options headers
         """
@@ -77,8 +75,7 @@ class HandleRequests(BaseHTTPRequestHandler):
         self.end_headers()
 
 
-# This function is not inside the class. It is the starting
-# point of this application.
+
 def main():
     """Starts the server on port 8088 using the HandleRequests class
     """

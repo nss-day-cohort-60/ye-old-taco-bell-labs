@@ -30,4 +30,26 @@ PRODUCTS = [
 ]
 
 def get_all_products():
+    """Get entire list of products
+
+    Returns:
+        list: The list of product dictionaries
+    """
     return PRODUCTS
+
+def get_single_product(id):
+    """Get a single product from the list of dictionaries
+
+    Args:
+        id (int): Primary key of requested product
+
+    Returns:
+        dictionary: Found dictionary in list
+    """
+    requested_product = None
+
+    for product in PRODUCTS:
+        if product["id"] == id:
+            requested_product = product
+
+    return requested_product
