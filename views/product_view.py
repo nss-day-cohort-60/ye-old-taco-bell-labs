@@ -1,3 +1,5 @@
+import random
+
 PRODUCTS = [
     {
         "id": 1,
@@ -14,20 +16,38 @@ PRODUCTS = [
         "suggested_price": 1.49
     },
     {
-        "id": 3,
+        "id": 5,
         "name": "Triple-Layer Beefaloco Supreme Bowl",
         "type_id": 2,
         "date_created": "01/11/2023",
         "suggested_price": 19.99
     },
     {
-        "id": 4,
+        "id": 8,
         "name": "Bean Crunchobowl-Choritadilla",
         "type_id": 2,
         "date_created": "01/10/2023",
         "suggested_price": 0.50
+    },
+    {
+        "id": 12,
+        "name": "Fiesta Yumtada Supreme Taco",
+        "type_id": 3,
+        "date_created": "01/13/2023",
+        "suggested_price": 5.50
     }
 ]
+
+
+def get_product_id():
+    """Get a random primary key of a dictionary in the product list
+
+    Returns:
+        int: primary key
+    """
+    random_product = random.choice(PRODUCTS)
+    return random_product['id']
+
 
 def get_all_products():
     """Get entire list of products
@@ -36,6 +56,7 @@ def get_all_products():
         list: The list of product dictionaries
     """
     return PRODUCTS
+
 
 def get_single_product(id):
     """Get a single product from the list of dictionaries

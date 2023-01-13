@@ -1,6 +1,9 @@
 import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
-from views import get_all_products, get_single_product, get_all_product_types
+from views import (
+    get_all_products, get_single_product,
+    get_all_product_types, get_product_id
+)
 
 
 class HandleRequests(BaseHTTPRequestHandler):
@@ -17,7 +20,8 @@ class HandleRequests(BaseHTTPRequestHandler):
         except IndexError:
             pass
         except ValueError:
-            pass
+            if path_params[2] == 'random':
+                id = get_product_id()
 
         return (resource, id)  # This is a tuple
 
@@ -25,7 +29,7 @@ class HandleRequests(BaseHTTPRequestHandler):
     def do_GET(self):
         """Handles GET requests to the server
         """
-        
+
         (resource, id) = self.parse_url(self.path)
 
         if resource == "products":
