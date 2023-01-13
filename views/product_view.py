@@ -16,7 +16,14 @@ PRODUCTS = [
         "suggested_price": 1.49
     },
     {
-        "id": 4,
+        "id": 5,
+        "name": "Triple-Layer Beefaloco Supreme Bowl",
+        "type_id": 2,
+        "date_created": "01/11/2023",
+        "suggested_price": 19.99
+    },
+    {
+        "id": 8,
         "name": "Bean Crunchobowl-Choritadilla",
         "type_id": 2,
         "date_created": "01/10/2023",
@@ -30,6 +37,7 @@ PRODUCTS = [
         "suggested_price": 5.50
     }
 ]
+
 
 def get_product_id():
     """Get a random primary key of a dictionary in the product list
@@ -48,6 +56,7 @@ def get_all_products():
         list: The list of product dictionaries
     """
     return PRODUCTS
+
 
 def get_single_product(id):
     """Get a single product from the list of dictionaries
