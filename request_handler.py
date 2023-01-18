@@ -35,8 +35,14 @@ class HandleRequests(BaseHTTPRequestHandler):
 
         if resource == "products":
             if id is not None:
-                self._set_headers(200)
                 response = get_single_product(id)
+
+                if response is not None:
+                    self._set_headers(200)
+                else:
+                    response = ""
+                    self._set_headers(404)
+
             else:
                 self._set_headers(200)
                 response = get_all_products()
