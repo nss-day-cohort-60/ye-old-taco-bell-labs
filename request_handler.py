@@ -2,7 +2,7 @@ import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from views import (
     get_all_products, get_single_product,
-    get_all_product_types, get_product_id
+    get_all_product_types, get_product_id, create_product_type
 )
 
 
@@ -39,7 +39,7 @@ class HandleRequests(BaseHTTPRequestHandler):
             else:
                 self._set_headers(200)
                 response = get_all_products()
-        elif resource == "product_types":
+        elif resource == "types":
             if id is not None:
                 self._set_headers(405)
                 response = ""
@@ -52,14 +52,21 @@ class HandleRequests(BaseHTTPRequestHandler):
         self.wfile.write(json.dumps(response).encode())
 
     def do_POST(self):
-        """Handles POST requests to the server"""
-
-        self._set_headers(201)
-
         content_len = int(self.headers.get('content-length', 0))
         post_body = self.rfile.read(content_len)
-        response = { "payload": post_body }
-        self.wfile.write(json.dumps(response).encode())
+
+        post_body = json.loads(post_body)
+        (resource, id) = self.parse_url(self.path)
+        new_post = None
+        if resource == "types":
+            new_post = create_product_type(post_body)
+            if 'id' in new_post:
+                self._set_headers(201)
+            else:
+                self._set_headers(400)
+
+
+        self.wfile.write(json.dumps(new_post).encode())
 
     def do_PUT(self):
         """Handles PUT requests to the server"""
