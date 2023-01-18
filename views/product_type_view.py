@@ -25,3 +25,18 @@ def get_all_product_types():
         list: The list of product type dictionaries
     """
     return PRODUCT_TYPES
+
+def create_product_type(product_type):
+    """Create a product type
+
+    Returns:
+        the new product type
+    """
+    if "description" in product_type:
+        max_id = PRODUCT_TYPES[-1]["id"]
+        product_type["id"] = max_id + 1
+        PRODUCT_TYPES.append(product_type)
+        return product_type
+    else:
+        return {}
+  
