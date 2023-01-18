@@ -39,7 +39,7 @@ class HandleRequests(BaseHTTPRequestHandler):
             else:
                 self._set_headers(200)
                 response = get_all_products()
-        elif resource == "product_types":
+        elif resource == "types":
             if id is not None:
                 self._set_headers(405)
                 response = ""
@@ -52,15 +52,20 @@ class HandleRequests(BaseHTTPRequestHandler):
         self.wfile.write(json.dumps(response).encode())
 
     def do_POST(self):
-        self._set_headers(201)
         content_len = int(self.headers.get('content-length', 0))
         post_body = self.rfile.read(content_len)
 
         post_body = json.loads(post_body)
         (resource, id) = self.parse_url(self.path)
         new_post = None
-        if resource == "product_types":
+        if resource == "types":
             new_post = create_product_type(post_body)
+            if 'id' in new_post:
+                self._set_headers(201)
+            else:
+                self._set_headers(400)
+
+
         self.wfile.write(json.dumps(new_post).encode())
 
     def do_PUT(self):

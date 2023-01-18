@@ -32,8 +32,11 @@ def create_product_type(product_type):
     Returns:
         the new product type
     """
-    max_id = PRODUCT_TYPES[-1]["id"]
-    new_id = max_id + 1
-    product_type["id"] = new_id
-    PRODUCT_TYPES.append(product_type)
-    return product_type
+    if "description" in product_type:
+        max_id = PRODUCT_TYPES[-1]["id"]
+        product_type["id"] = max_id + 1
+        PRODUCT_TYPES.append(product_type)
+        return product_type
+    else:
+        return {}
+  
