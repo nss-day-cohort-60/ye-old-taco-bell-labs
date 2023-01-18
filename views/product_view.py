@@ -38,6 +38,26 @@ PRODUCTS = [
     }
 ]
 
+def remove_product(id):
+    """Remove a dictionary from the product list
+
+    Args:
+        id (int): Primary key of item to delete
+
+    Returns:
+        bool: Whether the product was found an deleted
+    """
+    index_to_remove = -1
+
+    for index, product in enumerate(PRODUCTS):
+        if product['id'] == id:
+            index_to_remove = index
+
+    if index_to_remove > -1:
+        del PRODUCTS[index_to_remove]
+        return True
+    else:
+        return False
 
 def get_product_id():
     """Get a random primary key of a dictionary in the product list

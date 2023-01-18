@@ -2,7 +2,8 @@ import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from views import (
     get_all_products, get_single_product,
-    get_all_product_types, get_product_id, create_product_type
+    get_all_product_types, get_product_id,
+    remove_product, create_product_type
 )
 
 
@@ -34,8 +35,14 @@ class HandleRequests(BaseHTTPRequestHandler):
 
         if resource == "products":
             if id is not None:
-                self._set_headers(200)
                 response = get_single_product(id)
+
+                if response is not None:
+                    self._set_headers(200)
+                else:
+                    response = ""
+                    self._set_headers(404)
+
             else:
                 self._set_headers(200)
                 response = get_all_products()
@@ -67,6 +74,23 @@ class HandleRequests(BaseHTTPRequestHandler):
 
 
         self.wfile.write(json.dumps(new_post).encode())
+
+    def do_DELETE(self):
+        """Handle all DELETE requests
+        """
+        (resource, id) = self.parse_url(self.path)
+
+        success = False
+        if resource == 'products':
+            success = remove_product(id)
+
+        if success:
+            self._set_headers(204)
+        else:
+            self._set_headers(404)
+
+        self.wfile.write("".encode())
+
 
     def do_PUT(self):
         """Handles PUT requests to the server"""
